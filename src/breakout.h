@@ -32,6 +32,16 @@ struct Bounds
 };
 
 
+class Brick
+{
+public:
+    Brick();
+    ~Brick();
+    
+    float x;
+    float y;
+};
+
 
 class Breakout
 {
