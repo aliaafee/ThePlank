@@ -37,9 +37,16 @@ class Brick
 public:
     Brick();
     ~Brick();
-    
+
+    bool collided(Ball* ball);
+    void show(GamePad *gamepad);
+    void hide(GamePad *gamepad);
+
     float x;
     float y;
+    float width;
+    float height;
+    bool visibile;
 };
 
 
@@ -57,9 +64,10 @@ private:
     Ball ball;
     Paddle paddle;
     Bounds bounds;
+    Brick bricks[42];
+    int brickCount;
+
     float maxDeflection;
-    bool alive;
-    bool paused;
 
     void gameOver();
     void restartGame();
