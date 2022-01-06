@@ -6,22 +6,10 @@
 //#include <Fonts/FreeSans9pt7b.h>
 #include <XPT2046_Touchscreen.h>
 
+#include "pin-config.h"
+
 #ifndef GAME_PAD_H
 #define GAME_PAD_H
-
-#define screenCS_ A5
-#define screenDC_ A3
-#define screenReset_ A4
-#define touchScreenCS_ A2
-#define touchScreenIRQ_ 2
-#define btnUpPin_ 8
-#define btnDownPin_ 7
-#define btnRightPin_ 6
-#define btnLeftPin_ 9
-#define btnAPin_ 4
-#define btnBPin_ 5
-#define btnBackPin_ A0
-#define buzzerPin_ 3
 
 #define calXmin 177
 #define calXmax 3860
@@ -45,13 +33,13 @@ public:
 
   void begin();
 
-  bool pressedUp() { return buttonPressed_(btnUpPin_); }
-  bool pressedDown() { return buttonPressed_(btnDownPin_); }
-  bool pressedRight() { return buttonPressed_(btnRightPin_); }
-  bool pressedLeft() { return buttonPressed_(btnLeftPin_); }
-  bool pressedA() { return buttonPressed_(btnAPin_); }
-  bool pressedB() { return buttonPressed_(btnBPin_); }
-  bool pressedBack() { return buttonPressed_(btnBackPin_); }
+  bool pressedUp() { return buttonPressed_(BTN_UP); }
+  bool pressedDown() { return buttonPressed_(BTN_DOWN); }
+  bool pressedRight() { return buttonPressed_(BTN_RIGHT); }
+  bool pressedLeft() { return buttonPressed_(BTN_LEFT); }
+  bool pressedA() { return buttonPressed_(BTN_A); }
+  bool pressedB() { return buttonPressed_(BTN_B); }
+  bool pressedBack() { return buttonPressed_(BTN_SELECT); }
 
   bool screenTouched() { return touchScreen_->tirqTouched(); }
   ScreenPoint getPoint();

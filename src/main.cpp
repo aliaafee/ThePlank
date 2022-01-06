@@ -15,6 +15,7 @@ StateMachine machine = StateMachine();
 GamePad gamepad = GamePad();
 
 #ifdef ENABLE_SD
+#define SD_CS 9 //A1
 #define SPI_CLOCK SD_SCK_MHZ(50)
 #define SD_CONFIG SdSpiConfig(SD_CS, SHARED_SPI, SPI_CLOCK)
 SdFat sd;
@@ -66,29 +67,29 @@ void loopReader()
     if (SD_available)
     {
 #ifdef ENABLE_SD
-      gamePad.setStatus("SD inserted");
+      gamepad.setStatus("SD inserted");
       File myFile;
       myFile = sd.open("test2.txt", FILE_WRITE);
       // if the file opened okay, write to it:
       if (myFile)
       {
-        gamePad.setStatus("Writing to test.txt...");
+        gamepad.setStatus("Writing to test.txt...");
         myFile.println("testing 1, 2, 3.");
         // close the file:
         myFile.close();
-        gamePad.setStatus("done writing.");
+        gamepad.setStatus("done writing.");
       }
       else
       {
         // if the file didn't open, print an error:
-        gamePad.setStatus("error opening test.txt");
+        gamepad.setStatus("error opening test.txt");
       }
 
       // re-open the file for reading:
       myFile = sd.open("test2.txt");
       if (myFile)
       {
-        gamePad.setStatus("test.txt: reading..");
+        gamepad.setStatus("test.txt: reading..");
 
         // read from the file until there's nothing else in it:
         String w;
@@ -96,15 +97,15 @@ void loopReader()
         {
           w = w + myFile.readString();
         }
-        gamePad.setStatus("Done reading");
-        tft.println(w);
+        gamepad.setStatus("Done reading");
+        gamepad.screen->println(w);
         // close the file:
         myFile.close();
       }
       else
       {
         // if the file didn't open, print an error:
-        gamePad.setStatus("error opening test.txt");
+        gamepad.setStatus("error opening test.txt");
       }
 #endif
     }

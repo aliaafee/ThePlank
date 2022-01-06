@@ -2,8 +2,8 @@
 
 GamePad::GamePad()
 {
-    screen = new Adafruit_ILI9341(screenCS_, screenDC_);
-    touchScreen_ = new XPT2046_Touchscreen(touchScreenCS_, touchScreenIRQ_);
+    screen = new Adafruit_ILI9341(SCREEN_CS, SCREEN_DC);
+    touchScreen_ = new XPT2046_Touchscreen(TOUCH_CS, TOUCH_IRQ);
 }
 
 GamePad::~GamePad()
@@ -13,16 +13,16 @@ GamePad::~GamePad()
 
 void GamePad::begin()
 {
-    pinMode(screenCS_, OUTPUT);
-    pinMode(screenDC_, OUTPUT);
-    pinMode(screenReset_, OUTPUT);
+    pinMode(SCREEN_CS, OUTPUT);
+    pinMode(SCREEN_DC, OUTPUT);
+    pinMode(SCREEN_RESET, OUTPUT);
 
-    digitalWrite(screenCS_, HIGH);
-    digitalWrite(screenDC_, HIGH);
-    digitalWrite(screenReset_, HIGH);
+    digitalWrite(SCREEN_CS, HIGH);
+    digitalWrite(SCREEN_DC, HIGH);
+    digitalWrite(SCREEN_RESET, HIGH);
 
-    pinMode(touchScreenCS_, OUTPUT);
-    digitalWrite(touchScreenCS_, HIGH);
+    pinMode(TOUCH_CS, OUTPUT);
+    digitalWrite(TOUCH_CS, HIGH);
 
     screen->begin();
     screen->setRotation(3);
@@ -30,13 +30,13 @@ void GamePad::begin()
     touchScreen_->begin();
     touchScreen_->setRotation(30);
 
-    pinMode(btnUpPin_, INPUT);
-    pinMode(btnDownPin_, INPUT);
-    pinMode(btnRightPin_, INPUT);
-    pinMode(btnLeftPin_, INPUT);
-    pinMode(btnAPin_, INPUT);
-    pinMode(btnBPin_, INPUT);
-    pinMode(btnBackPin_, INPUT);
+    pinMode(BTN_UP, INPUT);
+    pinMode(BTN_DOWN, INPUT);
+    pinMode(BTN_RIGHT, INPUT);
+    pinMode(BTN_LEFT, INPUT);
+    pinMode(BTN_A, INPUT);
+    pinMode(BTN_B, INPUT);
+    pinMode(BTN_SELECT, INPUT);
 
     backgroundColor = ILI9341_BLACK;
 }
@@ -89,9 +89,9 @@ void GamePad::printCentered(int16_t x, int16_t y, String string)
 
 void GamePad::beep()
 {
-    tone(buzzerPin_, 1000);
+    tone(BUZZER, 1000);
     delay(10);
-    tone(buzzerPin_, 4000);
+    tone(BUZZER, 4000);
     delay(20);
-    noTone(buzzerPin_);
+    noTone(BUZZER);
 }
