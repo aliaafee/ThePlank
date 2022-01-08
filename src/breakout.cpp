@@ -111,20 +111,11 @@ void Brick::hide(GamePad *gamepad)
     visibile = false;
 }
 
-Breakout::Breakout(GamePad *gamepad_)
-{
-    gamepad = gamepad_;
-}
-
-Breakout::~Breakout()
-{
-    ;
-}
-
 void Breakout::begin()
 {
     lastFrame = millis();
 
+    gamepad->clearScreen();
     gamepad->setStatus("Breakout X");
 
     maxDeflection = 1.0472;

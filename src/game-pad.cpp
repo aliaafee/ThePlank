@@ -51,6 +51,32 @@ void GamePad::begin()
     pinMode(BTN_SELECT, INPUT);
 
     backgroundColor = ILI9341_BLACK;
+
+    setCurrentApp(homeApp);
+}
+
+void GamePad::loop()
+{
+    if (currentApp == NULL) { return; }
+    (currentApp)->loop();
+}
+
+void GamePad::setCurrentApp(App *app)
+{
+    app->begin();
+    currentApp = app;
+}
+
+void GamePad::setHomeApp(App *app)
+{
+    homeApp = app;
+}
+
+void GamePad::gotoHomeApp()
+{
+    if (homeApp == NULL) { return; }
+
+    setCurrentApp(homeApp);
 }
 
 bool GamePad::buttonPressed_(uint8_t btnPin)

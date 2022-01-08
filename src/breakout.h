@@ -1,6 +1,7 @@
 #ifndef BREAKOUT_H
 #define BREAKOUT_H
 
+#include "app.h"
 #include "game-pad.h"
 
 #define FRAME_TIME 20
@@ -52,12 +53,12 @@ public:
 };
 
 
-class Breakout
+class Breakout : public App
 {
 public:
-    GamePad *gamepad;
-    Breakout(GamePad *gamepad_);
-    ~Breakout();
+    //GamePad *gamepad;
+    Breakout(GamePad *gamepad_) : App(gamepad_) {};
+    ~Breakout() {};
 
     void begin();
     void loop();

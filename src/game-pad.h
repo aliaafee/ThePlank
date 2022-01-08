@@ -10,13 +10,13 @@
 #include <XPT2046_Touchscreen.h>
 
 #include "pin-config.h"
+#include "app.h"
 
 #define calXmin 177
 #define calXmax 3860
 #define calYmin 93
 #define calYmax 3737
 
-//#define ENABLE_SD
 #ifdef ENABLE_SD
 #include <SdFat.h>
 #define SPI_CLOCK SD_SCK_MHZ(50)
@@ -32,6 +32,8 @@ struct ScreenPoint
 class GamePad
 {
 public:
+  App *homeApp;
+  App *currentApp;
   Adafruit_ILI9341 *screen;
   int16_t backgroundColor;
 
@@ -39,6 +41,10 @@ public:
   ~GamePad();
 
   void begin();
+  void loop();
+  void setCurrentApp(App *app);
+  void setHomeApp(App *app);
+  void gotoHomeApp();
 
   bool pressedUp() { return buttonPressed_(BTN_UP); }
   bool pressedDown() { return buttonPressed_(BTN_DOWN); }
