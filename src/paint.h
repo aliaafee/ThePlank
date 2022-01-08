@@ -8,6 +8,7 @@ class Paint : public App
 {
 public:
     Paint(GamePad *gamepad) : App(gamepad) {};
+    String getName() { return "Paint"; }
     void begin();
     void loop();
 };

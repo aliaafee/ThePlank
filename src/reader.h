@@ -8,6 +8,8 @@ class Reader : public App
 {
 public:
     Reader(GamePad *gamepad) : App(gamepad) {};
+
+    String getName() { return "Reader"; }
     void begin();
     void loop();
 };

@@ -60,6 +60,7 @@ public:
     Breakout(GamePad *gamepad_) : App(gamepad_) {};
     ~Breakout() {};
 
+    String getName() { return "Breakout"; }
     void begin();
     void loop();
 
