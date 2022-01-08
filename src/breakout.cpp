@@ -123,6 +123,8 @@ Breakout::~Breakout()
 
 void Breakout::begin()
 {
+    lastFrame = millis();
+
     gamepad->setStatus("Breakout X");
 
     maxDeflection = 1.0472;
@@ -170,6 +172,9 @@ void Breakout::begin()
 
 void Breakout::loop()
 {
+    while ((millis() - lastFrame) < FRAME_TIME)
+        ;
+    lastFrame = millis();
     (this->*currentLoop)();
 }
 

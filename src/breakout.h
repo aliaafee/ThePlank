@@ -1,7 +1,9 @@
-#include "game-pad.h"
-
 #ifndef BREAKOUT_H
 #define BREAKOUT_H
+
+#include "game-pad.h"
+
+#define FRAME_TIME 20
 
 struct Ball
 {
@@ -61,6 +63,7 @@ public:
     void loop();
 
 private:
+    unsigned long lastFrame;
     Ball ball;
     Paddle paddle;
     Bounds bounds;

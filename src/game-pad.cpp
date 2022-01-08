@@ -30,6 +30,18 @@ void GamePad::begin()
     touchScreen_->begin();
     touchScreen_->setRotation(30);
 
+    sd_available_ = false;
+#ifdef ENABLE_SD
+    if (sd.begin(SD_CONFIG))
+    {
+        sd_available_ = true;
+    }
+    else
+    {
+        sd_available_ = false;
+    }
+#endif
+
     pinMode(BTN_UP, INPUT);
     pinMode(BTN_DOWN, INPUT);
     pinMode(BTN_RIGHT, INPUT);
@@ -66,7 +78,7 @@ void GamePad::clearScreen()
 void GamePad::setStatus(String status)
 {
     screen->fillRect(0, 0, screen->width(), 22, backgroundColor);
-    //tft.setFont(&FreeSans9pt7b);
+    //screen->setFont(&FreeSans9pt7b);
     screen->setTextColor(ILI9341_WHITE);
     screen->setCursor(0, 9);
     screen->println(status);
@@ -94,4 +106,8 @@ void GamePad::beep()
     tone(BUZZER, 4000);
     delay(20);
     noTone(BUZZER);
+}
+
+bool GamePad::sd_available() {
+    return sd_available_;
 }

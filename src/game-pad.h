@@ -1,3 +1,6 @@
+#ifndef GAME_PAD_H
+#define GAME_PAD_H
+
 #include <Arduino.h>
 #include <Wire.h>
 #include <SPI.h>
@@ -8,13 +11,17 @@
 
 #include "pin-config.h"
 
-#ifndef GAME_PAD_H
-#define GAME_PAD_H
-
 #define calXmin 177
 #define calXmax 3860
 #define calYmin 93
 #define calYmax 3737
+
+//#define ENABLE_SD
+#ifdef ENABLE_SD
+#include <SdFat.h>
+#define SPI_CLOCK SD_SCK_MHZ(50)
+#define SD_CONFIG SdSpiConfig(SD_CS, SHARED_SPI, SPI_CLOCK)
+#endif
 
 struct ScreenPoint
 {
@@ -50,10 +57,16 @@ public:
 
   void beep();
 
+  bool sd_available();
+#ifdef ENABLE_SD
+  SdFat sd;
+#endif
 private:
   XPT2046_Touchscreen *touchScreen_;
 
   bool buttonPressed_(uint8_t btnPin);
+
+  bool sd_available_;
 };
 
 #endif

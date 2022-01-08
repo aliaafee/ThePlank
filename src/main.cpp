@@ -1,7 +1,6 @@
 //#define ENABLE_SD
 
 #include <Arduino.h>
-#include <StateMachine.h>
 
 #ifdef ENABLE_SD
 #include <SdFat.h>
@@ -10,46 +9,28 @@
 #include "game-pad.h"
 #include "breakout.h"
 
-StateMachine machine = StateMachine();
-
 GamePad gamepad = GamePad();
-
-#ifdef ENABLE_SD
-#define SD_CS 9 //A1
-#define SPI_CLOCK SD_SCK_MHZ(50)
-#define SD_CONFIG SdSpiConfig(SD_CS, SHARED_SPI, SPI_CLOCK)
-SdFat sd;
-#endif
-bool SD_available = false;
 
 //Breakout
 Breakout breakout(&gamepad);
-unsigned long lastFrame;
+//unsigned long lastFrame;
+void beginGame()
+{
+  breakout.begin();
+}
 void loopGame()
 {
-  if (machine.executeOnce)
-  {
-    //Initialize
-    lastFrame = millis();
-    breakout.begin();
-  }
-  //Framerate limit
-  while ((millis() - lastFrame) < 20)
-    ;
-  lastFrame = millis();
-
   breakout.loop();
 }
-State *stateGame = machine.addState(&loopGame);
 
 //Paint
+void beginPaint()
+{
+  gamepad.clearScreen();
+  gamepad.setStatus("Paint");
+}
 void loopPaint()
 {
-  if (machine.executeOnce)
-  {
-    gamepad.clearScreen();
-    gamepad.setStatus("Paint");
-  }
   if (gamepad.screenTouched())
   {
     ScreenPoint p = gamepad.getPoint();
@@ -57,89 +38,78 @@ void loopPaint()
   }
   delay(20);
 }
-State *statePaint = machine.addState(&loopPaint);
 
 //Reader App
-void loopReader()
+void beginReader()
 {
-  if (machine.executeOnce)
+  if (gamepad.sd_available())
   {
-    if (SD_available)
-    {
 #ifdef ENABLE_SD
-      gamepad.setStatus("SD inserted");
-      File myFile;
-      myFile = sd.open("test2.txt", FILE_WRITE);
-      // if the file opened okay, write to it:
-      if (myFile)
-      {
-        gamepad.setStatus("Writing to test.txt...");
-        myFile.println("testing 1, 2, 3.");
-        // close the file:
-        myFile.close();
-        gamepad.setStatus("done writing.");
-      }
-      else
-      {
-        // if the file didn't open, print an error:
-        gamepad.setStatus("error opening test.txt");
-      }
-
-      // re-open the file for reading:
-      myFile = sd.open("test2.txt");
-      if (myFile)
-      {
-        gamepad.setStatus("test.txt: reading..");
-
-        // read from the file until there's nothing else in it:
-        String w;
-        while (myFile.available())
-        {
-          w = w + myFile.readString();
-        }
-        gamepad.setStatus("Done reading");
-        gamepad.screen->println(w);
-        // close the file:
-        myFile.close();
-      }
-      else
-      {
-        // if the file didn't open, print an error:
-        gamepad.setStatus("error opening test.txt");
-      }
-#endif
+    gamepad.setStatus("SD inserted");
+    File myFile;
+    myFile = gamepad.sd.open("test2.txt", FILE_WRITE);
+    // if the file opened okay, write to it:
+    if (myFile)
+    {
+      gamepad.setStatus("Writing to test.txt...");
+      myFile.println("testing 1, 2, 3.");
+      // close the file:
+      myFile.close();
+      gamepad.setStatus("done writing.");
     }
     else
     {
-      gamepad.setStatus("SD unavailable");
+      // if the file didn't open, print an error:
+      gamepad.setStatus("error opening test.txt");
     }
+
+    // re-open the file for reading:
+    myFile = gamepad.sd.open("test2.txt");
+    if (myFile)
+    {
+      gamepad.setStatus("test.txt: reading..");
+
+      // read from the file until there's nothing else in it:
+      String w;
+      while (myFile.available())
+      {
+        w = w + myFile.readString();
+      }
+      gamepad.setStatus("Done reading");
+      gamepad.screen->println(w);
+      // close the file:
+      myFile.close();
+    }
+    else
+    {
+      // if the file didn't open, print an error:
+      gamepad.setStatus("error opening test.txt");
+    } 
+#endif
   }
+  else
+  {
+    gamepad.setStatus("SD unavailable");
+  }
+  
 }
-State *stateReader = machine.addState(&loopReader);
+void loopReader()
+{
+
+}
+
 
 void setup()
 {
   gamepad.begin();
   gamepad.clearScreen();
 
-//Initialize SD Card
-#ifdef ENABLE_SD
-  if (sd.begin(SD_CONFIG))
-  {
-    SD_available = true;
-  }
-  else
-  {
-    SD_available = false;
-  }
-#endif
-
-  //machine.transitionTo(statePaint);
-  machine.transitionTo(stateGame);
-  //machine.transitionTo(stateReader);
+  beginGame();
+  //beginReader();
 }
 
 void loop()
 {
-  machine.run();
+  loopGame();
+  //loopReader();
 }
