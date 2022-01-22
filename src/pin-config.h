@@ -18,14 +18,12 @@
 
 #define BTN_SELECT 32
 #define BTN_START 33
-#define BTN_UP 25
-#define BTN_DOWN 26
+#define BTN_UP 14
+#define BTN_DOWN 13
 #define BTN_RIGHT 27
-#define BTN_LEFT 14
-#define BTN_B 12
-#define BTN_A 13
-
-
+#define BTN_LEFT 12
+#define BTN_B 26
+#define BTN_A 25
 
 #define BUZZER 0
 
