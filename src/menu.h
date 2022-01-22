@@ -15,9 +15,10 @@ public:
     void loop();
 
     void setItemsCount(int count) { itemsCount = count; }
-    void setItem(int i, App* app);
+    void setItem(int i, String name, App* app);
 private:
     App *items[3];
+    String names[3];
     int itemsCount;
     void drawItems();
     void highlightCurrentItem();

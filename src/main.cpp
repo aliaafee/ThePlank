@@ -21,9 +21,9 @@ Menu menu(&gamepad);
 void setup()
 {
   menu.setItemsCount(3);
-  menu.setItem(0, &breakout);
-  menu.setItem(1, &paint);
-  menu.setItem(2, &reader);
+  menu.setItem(0, "Breakout", &breakout);
+  menu.setItem(1, "Paint", &paint);
+  menu.setItem(2, "Reader", &reader);
 
   gamepad.begin(&menu);
 }

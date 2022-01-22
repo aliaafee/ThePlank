@@ -26,10 +26,11 @@ void Menu::loop()
     }
 }
 
-void Menu::setItem(int i, App* app) 
+void Menu::setItem(int i, String name, App* app) 
 {
     if ( i > itemsCount - 1 ) { return ;}
 
+    names[i] = name;
     items[i] = app;
 }
 
@@ -37,7 +38,7 @@ void Menu::setItem(int i, App* app)
 void Menu::drawItems()
 {
     for (int i=0; i < itemsCount; i++) {
-        gamepad->printCentered(320/2, (240/2) - 45 + (i * 30), items[i]->getName());
+        gamepad->printCentered(320/2, (240/2) - 45 + (i * 30), names[i]);
     }
 }
 
