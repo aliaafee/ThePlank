@@ -6,14 +6,13 @@ void Reader::begin()
     gamepad->setStatus("Reader");
 
     if (!gamepad->sd_available()) {
-        gamepad->setStatus("SD unavailable");
+        gamepad->setStatus("SD was not initalized");
         return;
     }
 
-#ifdef ENABLE_SD
     gamepad->setStatus("SD available");
     File myFile;
-    myFile = gamepad->sd.open("test3.txt", FILE_WRITE);
+    myFile = gamepad->sd->open("test3.txt", FILE_WRITE);
     // if the file opened okay, write to it:
     if (myFile)
     {
@@ -30,7 +29,7 @@ void Reader::begin()
     }
 
     // re-open the file for reading:
-    myFile = gamepad->sd.open("test3.txt");
+    myFile = gamepad->sd->open("test3.txt");
     if (myFile)
     {
         gamepad->setStatus("test.txt: reading..");
@@ -51,7 +50,6 @@ void Reader::begin()
       // if the file didn't open, print an error:
       gamepad->setStatus("error opening test.txt");
     }
-#endif
 }
 
 

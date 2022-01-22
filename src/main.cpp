@@ -25,8 +25,7 @@ void setup()
   menu.setItem(1, &paint);
   menu.setItem(2, &reader);
 
-  gamepad.setHomeApp(&menu);
-  gamepad.begin();
+  gamepad.begin(&menu);
 }
 
 void loop()

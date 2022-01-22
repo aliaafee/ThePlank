@@ -14,13 +14,14 @@ void Menu::loop()
         selectPrev();
         delay(200);
     }
-
-    if (gamepad->pressedDown()) {
+    
+    if (gamepad->pressedDown() || gamepad->pressedSelect()) {
         selectNext();
         delay(200);
     }
 
-    if (gamepad->pressedA()) {
+    if (gamepad->pressedStart() || gamepad->pressedA()) {
+        delay(200);
         gamepad->setCurrentApp(items[currentItem]);
     }
 }
@@ -35,7 +36,7 @@ void Menu::setItem(int i, App* app)
 
 void Menu::drawItems()
 {
-    for (int i; i < itemsCount; i++) {
+    for (int i=0; i < itemsCount; i++) {
         gamepad->printCentered(320/2, (240/2) - 45 + (i * 30), items[i]->getName());
     }
 }

@@ -3,24 +3,30 @@
 
 #include <Arduino.h>
 
-#define SCREEN_CS A5
-#define SCREEN_DC A3
-#define SCREEN_RESET A4
+#define SCREEN_SCK 18
+#define SCREEN_MOSI 23
+#define SCREEN_MISO 19
 
-#define TOUCH_CS A2
-#define TOUCH_IRQ 2
+#define SCREEN_CS 22
+#define SCREEN_DC 17
+#define SCREEN_RESET 21
 
-#define SD_CS A1
+#define TOUCH_CS 16
+#define TOUCH_IRQ 4
 
-#define BTN_UP 8
-#define BTN_DOWN 7
-#define BTN_RIGHT 6
-#define BTN_LEFT 9
-#define BTN_A 4
-#define BTN_B 5
-#define BTN_SELECT A0
-//#define BTN_START
+#define SD_CS 15
 
-#define BUZZER 3
+#define BTN_SELECT 32
+#define BTN_START 33
+#define BTN_UP 25
+#define BTN_DOWN 26
+#define BTN_RIGHT 27
+#define BTN_LEFT 14
+#define BTN_B 12
+#define BTN_A 13
+
+
+
+#define BUZZER 0
 
 #endif

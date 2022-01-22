@@ -8,40 +8,53 @@ Brick::~Brick()
 {
 }
 
-bool Brick::collided(Ball* ball)
+bool Brick::collided(Ball *ball)
 {
-    if (!visibile) {
+    if (!visibile)
+    {
         return false;
     }
-    if (ball->x + ball->radius < x) {
+    if (ball->x + ball->radius < x)
+    {
         return false;
     }
-    if (ball->x - ball->radius > x + width) {
+    if (ball->x - ball->radius > x + width)
+    {
         return false;
     }
-    if (ball->y + ball->radius < y) {
+    if (ball->y + ball->radius < y)
+    {
         return false;
     }
-    if (ball->y - ball->radius > y + height) {
+    if (ball->y - ball->radius > y + height)
+    {
         return false;
     }
 
-    if (ball->x + ball->radius > x and ball->x - ball->radius < x + width) {
-        if (ball->y > y) {
+    if (ball->x + ball->radius > x and ball->x - ball->radius < x + width)
+    {
+        if (ball->y > y)
+        {
             ball->v_y = abs(ball->v_y);
-        } else {
+        }
+        else
+        {
             ball->v_y = abs(ball->v_y) * -1;
         }
-    } else {
-        if (ball->x > x) {
+    }
+    else
+    {
+        if (ball->x > x)
+        {
             ball->v_x = abs(ball->v_x);
-        } else {
+        }
+        else
+        {
             ball->v_x = abs(ball->v_x) * -1;
         }
     }
 
     return true;
-
 
     /*
 
@@ -137,14 +150,15 @@ void Breakout::begin()
         gamepad->screen->width() - ball.radius,
         gamepad->screen->height() - ball.radius - paddle.height};
 
-
     int brickColumns = 7;
     int brickRows = 6;
     brickCount = 42;
-    int brickWidth = 300/brickColumns;
+    int brickWidth = 300 / brickColumns;
 
-    for (int x = 0; x < brickColumns; x++) {
-        for (int y = 0; y < brickRows; y++) {
+    for (int x = 0; x < brickColumns; x++)
+    {
+        for (int y = 0; y < brickRows; y++)
+        {
             int i = y * brickColumns + x;
             bricks[i].x = x * brickWidth + 10;
             bricks[i].y = y * 10 + 20 + bounds.y_min;
@@ -190,10 +204,11 @@ void Breakout::pauseLoop()
 void Breakout::playLoop()
 {
     //Controls
-    if (gamepad->pressedBack())
+    if (gamepad->pressedStart())
     {
         pauseGame();
     }
+
     if (gamepad->pressedRight())
     {
         if (paddle.x < bounds.x_max - paddle.width / 2)
@@ -207,6 +222,20 @@ void Breakout::playLoop()
         if (paddle.x > bounds.x_min + paddle.width / 2)
         {
             paddle.x -= 5;
+        }
+    }
+
+    if (gamepad->screenTouched())
+    {
+        ScreenPoint point = gamepad->getPoint();
+        paddle.x = point.x;
+        if (paddle.x < bounds.x_min + paddle.width / 2)
+        {
+            paddle.x = bounds.x_min + paddle.width / 2;
+        }
+        if (paddle.x > bounds.x_max - paddle.width / 2)
+        {
+            paddle.x = bounds.x_max - paddle.width / 2;
         }
     }
 

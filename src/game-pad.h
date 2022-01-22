@@ -6,7 +6,7 @@
 #include <SPI.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_ILI9341.h>
-//#include <Fonts/FreeSans9pt7b.h>
+#include <Fonts/FreeSans9pt7b.h>
 #include <XPT2046_Touchscreen.h>
 
 #include "pin-config.h"
@@ -17,11 +17,10 @@
 #define calYmin 93
 #define calYmax 3737
 
-#ifdef ENABLE_SD
 #include <SdFat.h>
-#define SPI_CLOCK SD_SCK_MHZ(50)
+#define SPI_CLOCK SD_SCK_MHZ(16)
 #define SD_CONFIG SdSpiConfig(SD_CS, SHARED_SPI, SPI_CLOCK)
-#endif
+
 
 struct ScreenPoint
 {
@@ -32,18 +31,15 @@ struct ScreenPoint
 class GamePad
 {
 public:
-  App *homeApp;
-  App *currentApp;
   Adafruit_ILI9341 *screen;
   int16_t backgroundColor;
 
   GamePad();
   ~GamePad();
 
-  void begin();
+  void begin(App *app);
   void loop();
   void setCurrentApp(App *app);
-  void setHomeApp(App *app);
   void gotoHomeApp();
 
   bool pressedUp() { return buttonPressed_(BTN_UP); }
@@ -52,7 +48,8 @@ public:
   bool pressedLeft() { return buttonPressed_(BTN_LEFT); }
   bool pressedA() { return buttonPressed_(BTN_A); }
   bool pressedB() { return buttonPressed_(BTN_B); }
-  bool pressedBack() { return buttonPressed_(BTN_SELECT); }
+  bool pressedSelect() { return buttonPressed_(BTN_SELECT); }
+  bool pressedStart() { return buttonPressed_(BTN_START); }
 
   bool screenTouched() { return touchScreen_->tirqTouched(); }
   ScreenPoint getPoint();
@@ -64,15 +61,15 @@ public:
   void beep();
 
   bool sd_available();
-#ifdef ENABLE_SD
-  SdFat sd;
-#endif
+
+  SdFat *sd;
+
 private:
   XPT2046_Touchscreen *touchScreen_;
-
   bool buttonPressed_(uint8_t btnPin);
-
   bool sd_available_;
+  App *homeApp;
+  App *currentApp;
 };
 
 #endif
