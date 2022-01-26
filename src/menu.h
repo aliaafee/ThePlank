@@ -10,15 +10,15 @@ class Menu : public App
 {
 public:
     
-    Menu(GamePad *gamepad) : App(gamepad) { itemsCount = 3; };
+    Menu(GamePad *gamepad) : App(gamepad) { itemsCount = 4; };
     void begin();
     void loop();
 
     void setItemsCount(int count) { itemsCount = count; }
     void setItem(int i, String name, App* app);
 private:
-    App *items[3];
-    String names[3];
+    App *items[4];
+    String names[4];
     int itemsCount;
     void drawItems();
     void highlightCurrentItem();

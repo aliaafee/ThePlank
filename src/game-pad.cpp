@@ -17,7 +17,7 @@ void GamePad::begin(App *app)
     pinMode(TOUCH_CS, OUTPUT);
     digitalWrite(TOUCH_CS, HIGH);
 
-    screen->begin();
+    screen->begin(80000000);
     screen->setRotation(3);
 
     touchScreen_->begin();
