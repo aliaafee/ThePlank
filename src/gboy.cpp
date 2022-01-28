@@ -13,23 +13,13 @@ void Gboy::begin()
         return;
     }
 
-    gamepad->screen->print("Looking fir GB ROM... ");
+    gamepad->screen->print("Looking for GB ROM... ");
     File currentFile = root.openNextFile();
     File romfile;
     while (currentFile)
     {
         if (!currentFile.isDirectory()) {
-            //WTF is it this hard to get a filename ????
-            char name[100];
-            currentFile.getName(name, 100);
-            String filename = "";
-            for (int i=0; i < 100; i++) {
-                if (name[i]) {
-                    filename += name[i];
-                } else {
-                    break;
-                }
-            }
+            String filename = gamepad->getFileName(currentFile);
             if (filename.endsWith(".gb")) {
                 romfile = currentFile;
                 gamepad->screen->print("Found ROM: ");
@@ -49,12 +39,6 @@ void Gboy::begin()
 	size_t romsize = romfile.size();
     gamepad->screen->print("Size: ");
     gamepad->screen->println(romsize);
-    /*
-    if (romsize > MAX_ROM_SIZE) {
-        gamepad->screen->print("ROM larger than max.");
-        gamepad->screen->println(MAX_ROM_SIZE);
-        return;
-    }*/
 
     unsigned char* gb_rom_loaded = (unsigned char*)calloc(romsize, 1);
 	if (!gb_rom_loaded) {
@@ -81,6 +65,9 @@ void Gboy::begin()
     mem_init2();
     cpu_init();
 
+    gamepad->clearScreen();
+    gamepad->setStatus("GBoy");
+
     rom_loaded_ = true;
 }
 
@@ -95,7 +82,7 @@ void Gboy::loop()
 
     cpu_cycle();
     lcd_cycle();
-    timer_cycle();
+    //timer_cycle();
 
     //gamepad->setStatus((String) (micros() - frameTime));
 }

@@ -17,7 +17,7 @@ void GamePad::begin(App *app)
     pinMode(TOUCH_CS, OUTPUT);
     digitalWrite(TOUCH_CS, HIGH);
 
-    screen->begin(80000000);
+    screen->begin(240000000);
     screen->setRotation(3);
 
     touchScreen_->begin();
@@ -133,4 +133,20 @@ void GamePad::beep()
 bool GamePad::sd_available()
 {
     return sd_available_;
+}
+
+
+String GamePad::getFileName(File &file_)
+{
+    char name[100];
+    file_.getName(name, 100);
+    String filename = "";
+    for (int i=0; i < 100; i++) {
+        if (name[i]) {
+            filename += name[i];
+        } else {
+            break;
+        }
+    }
+    return filename;
 }

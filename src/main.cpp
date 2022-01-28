@@ -1,6 +1,6 @@
 #include <Arduino.h>
 
-#include <esp_wifi.h>
+#include <esp32-hal-cpu.h>
 #include <esp_task_wdt.h>
 
 #include "game-pad.h"
@@ -23,9 +23,7 @@ Menu menu(&gamepad);
 
 void setup()
 {
-    
-    // turn off WiFi
-    //esp_wifi_deinit();
+    setCpuFrequencyMhz(240);
     
     // disable Core 0 WDT
     TaskHandle_t idle_0 = xTaskGetIdleTaskHandleForCPU(0);

@@ -63,6 +63,8 @@ public:
 
     SdFat *sd;
 
+    String getFileName(File &file_);
+
 private:
     XPT2046_Touchscreen *touchScreen_;
     bool buttonPressed_(uint8_t btnPin);

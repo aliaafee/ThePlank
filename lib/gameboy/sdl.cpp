@@ -26,39 +26,38 @@ void backlighting(bool state)
 byte pixels[GAMEBOY_HEIGHT * GAMEBOY_WIDTH / 4];
 uint16_t bitmap[GAMEBOY_WIDTH * GAMEBOY_HEIGHT];
 
+volatile bool frameUpdate;
+TaskHandle_t screenUpdater;
+
 static int button_start, button_select, button_a, button_b, button_down, button_up, button_left, button_right;
 
 byte getColorIndexFromFrameBuffer(int x, int y)
 {
   int offset = x + y * 160;
-  return (pixels[offset >> 2] >> ((offset & 3) << 1)) & 3;
+  byte value = (pixels[offset >> 2] >> ((offset & 3) << 1)) & 3;
+  return value;
 }
 //const int color[] = {0x000000, 0x555555, 0xAAAAAA, 0xFFFFFF};
 const int color[] = {0xFFFFFF, 0xAAAAAA, 0x555555, 0x000000};
 
-void drawPixel(int x, int y, int color2)
+void screenUpdateFunction(void *paremeter)
 {
-  int offset = x + y * 160;
-  bitmap[offset] = color2;
-}
-
-bool interlace;
-void SDL_Flip(byte *screen)
-{
-  interlace = !interlace;
-
-  int i, j;
-
-  for (i = 0; i < GAMEBOY_WIDTH; i = i + 1)
+  while (true)
   {
-    for (j = 0; j < GAMEBOY_HEIGHT; j = j + 1)
+    if (frameUpdate)
     {
-      bitmap[j + i * GAMEBOY_HEIGHT] = color[getColorIndexFromFrameBuffer(j, i)];
+      int i, j;
+      for (i = 0; i < GAMEBOY_WIDTH; i = i + 1)
+      {
+        for (j = 0; j < GAMEBOY_HEIGHT; j = j + 1)
+        {
+          bitmap[j + i * GAMEBOY_HEIGHT] = color[getColorIndexFromFrameBuffer(j, i)];
+        }
+      }
+      sdl_screen->drawRGBBitmap(80, 50, bitmap, GAMEBOY_HEIGHT, GAMEBOY_WIDTH);
+      frameUpdate = false;
     }
   }
-
-  sdl_screen->drawRGBBitmap(80, 50, bitmap, GAMEBOY_HEIGHT, GAMEBOY_WIDTH);
-  memset(pixels, 0, GAMEBOY_HEIGHT * GAMEBOY_WIDTH / 4 * sizeof(byte));
 }
 
 void sdl_init(
@@ -82,6 +81,15 @@ void sdl_init(
   pin_start = pin_start_;
 
   sdl_screen = sdl_screen_;
+  sdl_screen->println("Core 0 init...");
+  xTaskCreatePinnedToCore(
+      screenUpdateFunction,
+      "ScreenUpDateTask",
+      1000,
+      NULL,
+      0,
+      &screenUpdater,
+      0);
 }
 
 bool buttonPressed_(uint8_t btnPin)
@@ -96,7 +104,7 @@ bool buttonPressed_(uint8_t btnPin)
 int sdl_update(void)
 {
 
-    return 0;
+  return 0;
 }
 unsigned int sdl_get_buttons(void)
 {
@@ -120,18 +128,8 @@ byte *sdl_get_framebuffer(void)
 {
   return pixels;
 }
+
 void sdl_frame(void)
 {
-  /* 
-	if(frames == 0)
-		gettimeofday(&tv1, NULL);
-	
-	frames++;
-	if(frames % 1000 == 0)
-	{
-		gettimeofday(&tv2, NULL);
-		printf("Frames %d, seconds: %d, fps: %d\n", frames, tv2.tv_sec - tv1.tv_sec, frames/(tv2.tv_sec - tv1.tv_sec));
-	}
- */
-  SDL_Flip(pixels);
+  frameUpdate = true;
 }
