@@ -225,6 +225,7 @@ void Breakout::playLoop()
         }
     }
 
+    /*
     if (gamepad->screenTouched())
     {
         ScreenPoint point = gamepad->getPoint();
@@ -237,7 +238,7 @@ void Breakout::playLoop()
         {
             paddle.x = bounds.x_max - paddle.width / 2;
         }
-    }
+    }*/
 
     //Motion
     ball.x += ball.v_x;
